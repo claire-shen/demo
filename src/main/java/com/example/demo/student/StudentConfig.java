@@ -35,8 +35,15 @@ public class StudentConfig {
                     LocalDate.of(1999, Month.MARCH, 20)
             );
 
+            Student amy = new Student(
+                    4L,
+                    "Amy",
+                    "amy.huang@gmail.com",
+                    LocalDate.of(1995, Month.AUGUST, 31)
+            );
+
             repository.saveAll(
-                    List.of(claire, alan, mark)
+                    List.of(claire, alan, mark, amy)
             );
         };
     }

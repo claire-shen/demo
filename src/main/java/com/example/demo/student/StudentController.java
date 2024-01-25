@@ -1,11 +1,10 @@
 package com.example.demo.student;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.time.LocalDate;
-import com.example.demo.student.StudentService;
 
 //This class has all the resources for our API
 @RestController
@@ -31,6 +30,17 @@ public class StudentController {
 	public void deleteStudent(@PathVariable("studentId") Long studentId) { // delete by id
 		studentService.deleteStudent(studentId);
 	}
+
+	@PutMapping(path = "{studentId}")
+	public void updateStudent(
+			@PathVariable("studentId") Long studentId,
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String email) {
+		studentService.updateStudent(studentId, name, email);
+	}
+
+
+
 }
 
 

@@ -1,11 +1,13 @@
 package com.example.demo.student;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service //This is a service class
@@ -19,15 +21,6 @@ public class StudentService {
     }
     public List<Student> getStudents() {
         return studentRepository.findAll();
-//        return List.of( // now we have a get mapping for our student controller
-//                new Student( // right now this is a static list worry later
-//                        1L,
-//                        "Claire",
-//                        "claire.shen@gmail.com",
-//                        LocalDate.of(2003, 05, 05),
-//                        20
-//                )
-//        ); // this class will get converted to a JSON object on local host
     }
 
     public void addNewStudent(Student student){
@@ -47,6 +40,30 @@ public class StudentService {
             throw new IllegalStateException("student with id " + studentId + " does not exist");
         }
         studentRepository.deleteById(studentId);
+    }
+
+    @Transactional
+    public void updateStudent(Long studentId,
+                              String name,
+                              String email) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new IllegalStateException (
+                        "student with id " + studentId + "does not exist")
+                );
+        if (name != null && name.length() > 0 &&
+            !Objects.equals(student.getName(), name)){
+            student.setName(name);
+        }
+
+        if (email != null &&
+                email.length() > 0 &&
+                !Objects.equals(student.getEmail(), email)) {
+            Optional<Student> studentOptional = studentRepository.findStudentByEmail(email);
+            if (studentOptional.isPresent()) {
+                throw new IllegalStateException("email taken");
+            }
+            student.setEmail(email);
+        }
     }
 
 

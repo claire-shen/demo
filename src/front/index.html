@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Data Display</title>
+    <script>
+        function fetchData() {
+            fetch('http://localhost:8080/api/v1/student')
+                .then(response => response.json())
+                .then(data => {
+                    // Display the data on the page
+                    document.getElementById('api-data').textContent = JSON.stringify(data);
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error(error);
+                });
+        }
+    </script>
+</head>
+<body>
+<h1>API Data Display</h1>
+<button onclick="fetchData()">Fetch Data</button>
+<div id="api-data"></div>
+</body>
+</html>
